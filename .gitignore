@@ -1,0 +1,25 @@
+# Terraform/OpenTofu specific files
+.terraform/
+*.tfstate
+*.tfstate.*.backup
+.tfvars
+.tfvars.json
+override.tf
+override.tf.json
+.terraformrc
+terraform.rc
+
+# Crash log files
+crash.log
+
+# Provider-specific files (adjust as needed for your providers)
+.terraform.lock.hcl
+
+# Local configuration files
+*.env
+.vscode/
+.idea/
+
+# Operating System files
+.DS_Store
+Thumbs.db
