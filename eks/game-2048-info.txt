@@ -1,0 +1,85 @@
+Change the Service type from Ingress to LoadBalancer
+
+To install and run the 2048 game on an existing AWS EKS cluster with 
+EC2 managed nodes, follow these steps:
+
+Ensure Prerequisites are Met:
+
+kubectl installed and configured to interact with your EKS cluster.
+
+eksctl installed (optional, but useful for managing EKS clusters).
+
+AWS CLI installed and configured with appropriate IAM permissions.
+An existing EKS cluster with EC2 managed nodes.
+
+Create a Kubernetes Namespace:
+
+$kubectl create namespace game-2048
+
+or 
+
+yaml file:
+
+Code
+
+    # 01-namespace.yaml
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      name: game-2048
+
+Apply the namespace configuration:
+
+Code
+
+    kubectl apply -f 01-namespace.yaml
+
+Deploy the 2048 Game Application.
+The 2048 game can be deployed using a Kubernetes Deployment and Service. You can use the manifest 
+provided in the AWS documentation for a sample load balancer workload.
+
+Code
+
+    curl -o 2048-game.yaml https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.11.0/docs/examples/2048/2048_full.yaml
+
+Note: The 2048_full.yaml file includes an Ingress resource. If you are using the AWS Load Balancer 
+Controller, ensure it is correctly set up in your cluster. If not, you might need to modify the 
+Service object to be of type LoadBalancer to expose the application directly 
+through an AWS Network Load Balancer (NLB) or Classic Load Balancer (CLB), or configure an 
+Ingress controller like Nginx Ingress.
+
+Apply the deployment and service:
+
+Code
+
+    kubectl apply -f 2048-game.yaml
+
+Access the Game:
+
+If using Ingress with AWS Load Balancer Controller:
+Wait for the Application Load Balancer (ALB) to provision. Get the Ingress resource and find the ADDRESS (DNS name) of the ALB.
+
+Code
+
+        kubectl get ingress -n game-2048
+
+Open a web browser and navigate to the ADDRESS to access the game. If using a LoadBalancer Service. 
+Get the Service resource and find the EXTERNAL-IP (DNS name or IP address) of the Load Balancer.
+
+Code
+
+        kubectl get service -n game-2048
+
+Open a web browser and navigate to the EXTERNAL-IP to access the game.
+
+to clean up:
+
+run:
+
+kubectl delete deployment deployment-2048 -n game-2048
+kubectl delete service service-2048 -n game-2048
+kubectl delete ingress ingress-2048 -n game-2048
+
+then:
+
+$tofu destroy
