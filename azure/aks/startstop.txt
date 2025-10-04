@@ -1,0 +1,5 @@
+    az aks stop --name myAKSCluster --resource-group myResourceGroup
+
+    az aks show --name myAKSCluster --resource-group myResourceGroup --query powerState.code -o tsv
+
+    az aks start --name myAKSCluster --resource-group myResourceGroup

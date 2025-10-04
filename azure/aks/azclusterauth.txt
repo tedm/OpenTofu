@@ -1,0 +1,46 @@
+    az aks get-credentials --resource-group <your_resource_group_name> --name <your_aks_cluster_name>
+
+    kubectl get nodes
+
+before running tofu, ensure your shell environment where you run tofu has your Azure creds:
+
+e.g. 
+
+# Set the environment variable for your session
+export ARM_SUBSCRIPTION_ID="<your-subscription-id>"
+
+while you can hard code them in the provider block of main.tf or with variables.tf , it is not recommended.
+
+e.g. main.tf
+
+provider "azurerm" {
+  subscription_id = var.subscription_id # not recommended
+  features {}
+}
+
+variables.tf
+
+variable "subscription_id" {
+  type		= string
+  description	= "Azure Subscription ID here"
+}
+
+exporting the env variable manually or with a script is safer to keep account details out of code,
+even though the subscription_id itself could not be used by another party without additional auth.
+
+Use a secret managements tool such as HashiCorp Vault or Azure Key Vault, etc. for account info. needed
+at runtime.
+
+Installing the game-2048 app to the cluster:
+
+Once the cluster is up and running, you can install game-2048 to it using these steps:
+
+1. kubectl -f apply the 2048 game .yaml file to the cluster
+2. kubectl -f apply the lbservice.yaml file to the cluster
+3. run     kubectl get service game-2048-service to retrieve the external IP
+
+Note that this can also be applied using helm charts, but the above is using simple yaml deployments
+
+Note: Note that the game-2048 image is being pulled externally from alexwhen/docker-2048:latest Ensure that
+you trust any external container registries before pulling their code onto your cluster.
+

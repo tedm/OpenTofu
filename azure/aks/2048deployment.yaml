@@ -1,0 +1,22 @@
+    # deployment.yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: game-2048-deployment
+      labels:
+        app: game-2048
+    spec:
+      replicas: 3
+      selector:
+        matchLabels:
+          app: game-2048
+      template:
+        metadata:
+          labels:
+            app: game-2048
+        spec:
+          containers:
+          - name: game-2048
+            image: alexwhen/docker-2048:latest # A common 2048 game image
+            ports:
+            - containerPort: 80
