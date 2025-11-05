@@ -61,7 +61,7 @@ resource "aws_security_group" "rds" {
 
 resource "aws_db_parameter_group" "rds" {
   name_prefix = "${random_pet.name.id}-rds"
-  family      = "postgres15"
+  family      = "postgres16"
 
   parameter {
     name  = "log_connections"
@@ -81,7 +81,7 @@ resource "aws_db_instance" "rds" {
   allocated_storage           = 10
   apply_immediately           = true
   engine                      = "postgres"
-  engine_version              = "15" # increment when upgrading
+  engine_version              = "16" # increment when upgrading
   username                    = "pguser"
   password                    = var.db_password
   allow_major_version_upgrade = true
