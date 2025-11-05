@@ -72,8 +72,8 @@ data "aws_ami" "ubuntu" {
 
 resource "aws_instance" "myec2" {
   ami           = data.aws_ami.ubuntu.id
-  instance_type = "t2.micro"
-  key_name      = "mykeypair" # use aws_key_pair if adding new pub key
+  instance_type = "t3a.nano"
+  key_name      = "seagl2025" # use aws_key_pair if adding new pub key
   user_data     = <<EOF
 #!/bin/bash 
 apt-get update -y
@@ -84,7 +84,7 @@ systemctl enable nginx
 chmod 2775 /usr/share/nginx/html 
 find /usr/share/nginx/html -type d -exec chmod 2775 {} \;
 find /usr/share/nginx/html -type f -exec chmod 0664 {} \;
-echo "<h3> Welcome to the testec2 web server. Be sure to run terraform destroy when done</h3>" > /var/www/html/index.nginx-debian.html
+echo "<h1> Welcome to the SeaGL 2025! Be sure to run tofu destroy when done</h1>" > /var/www/html/index.nginx-debian.html
 EOF
 
   tags = {
